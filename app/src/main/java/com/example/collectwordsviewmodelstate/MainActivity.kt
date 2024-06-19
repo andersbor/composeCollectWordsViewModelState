@@ -52,9 +52,9 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun CollectWords(modifier: Modifier = Modifier, viewModel: WordsViewModelState = viewModel()) {
-    // Add to gradle file
+    // Add to gradle file  implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
     // https://tigeroakes.com/posts/mutablestateof-list-vs-mutablestatelistof/
-    val words = viewModel.words.collectAsState()
+    val words= viewModel.words
     var word by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
     var showList by remember { mutableStateOf(true) }
