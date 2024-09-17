@@ -40,24 +40,38 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val viewModel: WordsViewModelState = viewModel()
             CollectWordsViewModelStateTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CollectWords(modifier = Modifier.padding(innerPadding), viewModel = viewModel())
+                    CollectWords(
+                        modifier = Modifier.padding(innerPadding),
+                        words = viewModel.words.value,
+                        add = viewModel::add,
+                        remove = viewModel::remove,
+                        clear = viewModel::clear
+                    )
                 }
             }
         }
     }
 }
 
+// never pass down ViewModel instances to other composables
+// https://developer.android.com/develop/ui/compose/migrate/other-considerations#viewmodel
 @Composable
-fun CollectWords(modifier: Modifier = Modifier, viewModel: WordsViewModelState = viewModel()) {
+fun CollectWords(
+    modifier: Modifier = Modifier,
+    words: List<String>,
+    add: (String) -> Unit,
+    remove: (String) -> Unit,
+    clear: () -> Unit
+) {
     // Add to gradle file  implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
     // https://tigeroakes.com/posts/mutablestateof-list-vs-mutablestatelistof/
-    val words= viewModel.words
+    // val words = viewModel.words
     var word by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
     var showList by remember { mutableStateOf(true) }
-    val delete: (String) -> Unit = { viewModel.remove(it) }
 
     Column(modifier = modifier) {
         Text(text = "Collect words", style = MaterialTheme.typography.headlineLarge)
@@ -74,18 +88,19 @@ fun CollectWords(modifier: Modifier = Modifier, viewModel: WordsViewModelState =
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(onClick = {
-                viewModel.add(word)
+                add(word)
+                // viewModel.add(word)
             }) {
                 Text("Add")
             }
             Button(onClick = {
-                viewModel.clear()
+                clear()
                 word = ""
                 result = ""
             }) {
                 Text("Clear")
             }
-            Button(onClick = { result = words.value.toString() }) {
+            Button(onClick = { result = words.toString() }) {
                 Text("Show")
             }
         }
@@ -103,12 +118,12 @@ fun CollectWords(modifier: Modifier = Modifier, viewModel: WordsViewModelState =
             Switch(checked = showList, onCheckedChange = { showList = it })
         }
         if (showList) {
-            if (words.value.isEmpty()) {
+            if (words.isEmpty()) {
                 Text("No words")
             } else {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    items(words.value) { word: String ->
-                        Text(word, modifier = Modifier.clickable { viewModel.remove(word) })
+                    items(words) { word: String ->
+                        Text(word, modifier = Modifier.clickable { remove(word) })
                     }
                 }
             }
@@ -119,5 +134,9 @@ fun CollectWords(modifier: Modifier = Modifier, viewModel: WordsViewModelState =
 @Preview(showBackground = true)
 @Composable
 fun CollectWordsPreview() {
-    CollectWords(viewModel = WordsViewModelState())
+    CollectWords(
+        words = listOf("Hello", "World"),
+        add = {},
+        remove = {},
+        clear = {})
 }
