@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     CollectWords(
                         modifier = Modifier.padding(innerPadding),
-                        words = viewModel.words.value,
+                        words = viewModel.words,
                         add = viewModel::add,
                         remove = viewModel::remove,
                         clear = viewModel::clear
