@@ -72,7 +72,7 @@ fun CollectWords(
     var result by remember { mutableStateOf("") }
     var showList by remember { mutableStateOf(true) }
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(16.dp)) {
         Text(text = "Collect words", style = MaterialTheme.typography.headlineLarge)
         OutlinedTextField(
             value = word,
@@ -85,9 +85,7 @@ fun CollectWords(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = {
-                add(word)
-            }) {
+            Button(onClick = { add(word) }) {
                 Text("Add")
             }
             Button(onClick = {
