@@ -68,7 +68,6 @@ fun CollectWords(
 ) {
     // Add to gradle file  implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
     // https://tigeroakes.com/posts/mutablestateof-list-vs-mutablestatelistof/
-    // val words = viewModel.words
     var word by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
     var showList by remember { mutableStateOf(true) }
@@ -78,7 +77,6 @@ fun CollectWords(
         OutlinedTextField(
             value = word,
             onValueChange = { word = it },
-            // https://medium.com/@GkhKaya00/exploring-keyboard-types-in-kotlin-jetpack-compose-ca1f617e1109
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
             label = { Text("Enter a word") }
@@ -89,7 +87,6 @@ fun CollectWords(
         ) {
             Button(onClick = {
                 add(word)
-                // viewModel.add(word)
             }) {
                 Text("Add")
             }

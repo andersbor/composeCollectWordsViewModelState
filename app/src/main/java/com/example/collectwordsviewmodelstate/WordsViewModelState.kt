@@ -10,8 +10,8 @@ class WordsViewModelState : ViewModel() {
     var words by mutableStateOf(listOf<String>())
         private set // https://medium.com/@tangkegaga/private-set-set-is-private-f7ad495e201b
 
-    fun add(item: String) {
-        words= words + item
+    fun add(word: String) {
+        words= words + word
     }
 
     fun clear() {
