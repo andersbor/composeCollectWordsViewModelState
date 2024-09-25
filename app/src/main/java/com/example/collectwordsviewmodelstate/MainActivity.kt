@@ -40,6 +40,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            // add to gradle file
+            // https://developer.android.com/develop/ui/compose/libraries#viewmodel
             val viewModel: WordsViewModelState = viewModel()
             CollectWordsViewModelStateTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
