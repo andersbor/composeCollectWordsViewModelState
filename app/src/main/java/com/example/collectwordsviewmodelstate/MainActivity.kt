@@ -50,8 +50,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen() {
-    val viewModel: WordsViewModelState = viewModel()
+fun MainScreen(viewModel: WordsViewModelState = viewModel()) {
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         CollectWords(
             modifier = Modifier.padding(innerPadding),
