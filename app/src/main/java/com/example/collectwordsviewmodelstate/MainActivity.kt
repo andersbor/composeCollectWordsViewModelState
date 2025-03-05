@@ -42,19 +42,24 @@ class MainActivity : ComponentActivity() {
         setContent {
             // add to gradle file
             // https://developer.android.com/develop/ui/compose/libraries#viewmodel
-            val viewModel: WordsViewModelState = viewModel()
             CollectWordsViewModelStateTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CollectWords(
-                        modifier = Modifier.padding(innerPadding),
-                        words = viewModel.words,
-                        add = viewModel::add,
-                        remove = viewModel::remove,
-                        clear = viewModel::clear
-                    )
-                }
+                MainScreen()
             }
         }
+    }
+}
+
+@Composable
+fun MainScreen() {
+    val viewModel: WordsViewModelState = viewModel()
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+        CollectWords(
+            modifier = Modifier.padding(innerPadding),
+            words = viewModel.words,
+            add = viewModel::add,
+            remove = { viewModel.remove(it) },
+            clear = viewModel::clear
+        )
     }
 }
 
@@ -70,29 +75,28 @@ fun CollectWords(
 ) {
     // Add to gradle file  implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2")
     // https://tigeroakes.com/posts/mutablestateof-list-vs-mutablestatelistof/
-    var word by remember { mutableStateOf("") }
+    var newWord by remember { mutableStateOf("") }
     var result by remember { mutableStateOf("") }
     var showList by remember { mutableStateOf(true) }
 
     Column(modifier = modifier.padding(16.dp)) {
-        Text(text = "Collect words", style = MaterialTheme.typography.headlineLarge)
-        OutlinedTextField(
-            value = word,
-            onValueChange = { word = it },
+        Text(
+            text = "Collect words", style = MaterialTheme.typography.headlineLarge
+        )
+        OutlinedTextField(value = newWord,
+            onValueChange = { newWord = it },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             modifier = Modifier.fillMaxWidth(),
-            label = { Text("Enter a word") }
-        )
+            label = { Text("Enter a word") })
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = { add(word) }) {
+            Button(onClick = { add(newWord); newWord = "" }) {
                 Text("Add")
             }
             Button(onClick = {
                 clear()
-                word = ""
+                newWord = ""
                 result = ""
             }) {
                 Text("Clear")
@@ -107,8 +111,7 @@ fun CollectWords(
             Text("Empty", fontStyle = FontStyle.Italic)
         }
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()
         ) {
             Text("Show list")
             Spacer(modifier = Modifier.padding(5.dp))
@@ -120,7 +123,9 @@ fun CollectWords(
             } else {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(words) { word: String ->
-                        Text(word, modifier = Modifier.clickable { remove(word) })
+                        Text(word, modifier = Modifier
+                            .clickable { remove(word) }
+                            .padding(8.dp))
                     }
                 }
             }
@@ -131,9 +136,5 @@ fun CollectWords(
 @Preview(showBackground = true)
 @Composable
 fun CollectWordsPreview() {
-    CollectWords(
-        words = listOf("Hello", "World"),
-        add = {},
-        remove = {},
-        clear = {})
+    CollectWords(words = listOf("Hello", "World"), add = {}, remove = {}, clear = {})
 }

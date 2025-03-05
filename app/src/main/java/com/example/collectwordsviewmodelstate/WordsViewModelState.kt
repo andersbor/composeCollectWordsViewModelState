@@ -11,14 +11,14 @@ class WordsViewModelState : ViewModel() {
         private set // https://medium.com/@tangkegaga/private-set-set-is-private-f7ad495e201b
 
     fun add(word: String) {
-        words= words + word
+        words = words + word // + operator overloaded for List
     }
 
     fun clear() {
-        words = listOf()
+        words = listOf() // new list
     }
 
     fun remove(item: String) {
-        words = words - item
+        words = words - item // - operator overloaded for List
     }
 }
